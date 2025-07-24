@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Generator Ide Konten Mahasiswa (AI-Powered)</title>
+    <style>
+        /* Using a modern font for better readability */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            background: #f3f4f6; /* New light gray background */
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: #374151; /* Darker gray for text */
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            max-width: 700px;
+            width: 100%;
+            padding: 2rem 2.5rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2563eb; /* New blue color for heading */
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            font-size: 1.75rem;
+        }
+
+        label {
+            margin-top: 1rem;
+            font-weight: 500;
+            display: block;
+            color: #4b5563;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #d1d5db; /* Gray border */
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6; /* Blue focus color */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Style for invalid input */
+        input.invalid {
+            border-color: #ef4444; /* Red border for error */
+        }
+        input.invalid:focus {
+             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: #3b82f6; /* Blue button */
+            color: white;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #2563eb; /* Darker blue on hover */
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        button:disabled {
+            background-color: #93c5fd; /* Lighter blue when disabled */
+            cursor: not-allowed;
+        }
+
+        .output-container {
+            display: none; /* Hidden by default */
+            margin-top: 2rem;
+        }
+
+        .output {
+            background: #f9fafb; /* Very light gray for output bg */
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            position: relative;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dbeafe; /* Light blue background */
+            color: #1e40af; /* Dark blue text */
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #bfdbfe; /* Slightly darker blue on hover */
+        }
+        
+        /* Simple animation for the loading spinner */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-left-color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Styling for generated content */
+        .output strong {
+            color: #1d4ed8; /* Dark blue for strong text */
+            font-weight: 600;
+        }
+        
+        .output h3 { /* For titles like 'Judul Konten' */
+             font-size: 1.1rem;
+             font-weight: 700;
+             color: #1e3a8a; /* Even darker blue for titles */
+             margin-top: 1rem;
+             margin-bottom: 0.5rem;
+        }
+        .output h3:first-child {
+            margin-top: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Generator Ide Konten Mahasiswa</h1>
+        
+        <label for="jurusan">Jurusan:</label>
+        <input type="text" id="jurusan" placeholder="Contoh: Teknik Informatika">
+
+        <label for="jenisKonten">Jenis Konten:</label>
+        <select id="jenisKonten">
+            <option value="edukatif">Edukasi</option>
+            <option value="tips dan trik">Tips & Trik</option>
+            <option value="hiburan">Hiburan</option>
+            <option value="relatable">Relatable</option>
+        </select>
+
+        <label for="gayaKonten">Gaya Konten:</label>
+        <select id="gayaKonten">
+            <option value="lucu dan komedi">Lucu & Komedi</option>
+            <option value="informatif dan serius">Informatif & Serius</option>
+            <option value="aesthetic dan sinematik">Aesthetic & Sinematik</option>
+            <option value="motivasi">Motivasi</option>
+        </select>
+
+        <label for="platform">Platform Sosial Media:</label>
+        <select id="platform">
+            <option value="TikTok">TikTok</option>
+            <option value="Instagram Reels">Instagram Reels</option>
+            <option value="YouTube Shorts">YouTube Shorts</option>
+        </select>
+
+        <button id="generateButton" onclick="generateIdeas()">
+            <span id="buttonText">🎬 Generate Ide</span>
+            <div id="loader" style="display: none;" class="loader"></div>
+        </button>
+
+        <div class="output-container" id="outputContainer">
+            <h2 style="text-align: center; font-size: 1.5rem; font-weight: 600; color: #333;">✨ Ini dia idenya!</h2>
+            <div class="output">
+                <button id="copyButton" class="copy-btn" onclick="copyOutput()">Salin</button>
+                <div id="ideaOutput"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM element references
+        const generateButton = document.getElementById('generateButton');
+        const buttonText = document.getElementById('buttonText');
+        const loader = document.getElementById('loader');
+        const outputContainer = document.getElementById('outputContainer');
+        const ideaOutput = document.getElementById('ideaOutput');
+        const jurusanInput = document.getElementById('jurusan');
+        const copyButton = document.getElementById('copyButton');
+
+        /**
+         * Main function to generate content ideas.
+         * It constructs a prompt, calls the AI model, and displays the result.
+         */
+        async function generateIdeas() {
+            const jurusan = jurusanInput.value.trim();
+            
+            // Validate that the major is not empty
+            if (!jurusan) {
+                jurusanInput.classList.add('invalid');
+                jurusanInput.placeholder = "Jurusan tidak boleh kosong!";
+                jurusanInput.focus();
+                return;
+            }
+            jurusanInput.classList.remove('invalid');
+            jurusanInput.placeholder = "Contoh: Teknik Informatika";
+
+            const jenisKonten = document.getElementById("jenisKonten").value;
+            const gayaKonten = document.getElementById("gayaKonten").value;
+            const platform = document.getElementById("platform").value;
+
+            setLoading(true);
+
+            const prompt = `
+                Anda adalah seorang content strategist ahli.
+                Buatkan 10 ide konten viral untuk mahasiswa jurusan ${jurusan}.
+
+                Spesifikasi:
+                - Jenis Konten: ${jenisKonten}
+                - Gaya Konten: ${gayaKonten}
+                - Platform: ${platform}
+
+                Untuk setiap ide, berikan:
+                1.  **Judul Konten:** Judul yang menarik dan clickbait.
+                2.  **Caption Singkat:** Caption untuk postingan, termasuk 3-5 hashtag relevan.
+                3.  **Format Video:** Deskripsi singkat tentang bagaimana video itu akan terlihat (misalnya: talking head, POV, sketsa komedi, transisi aesthetic, dll).
+
+                Format output harus jelas dan mudah dibaca. Gunakan markdown untuk formatting, dengan setiap judul bagian (Judul Konten, Caption Singkat, Format Video) dibuat tebal. Beri nomor pada setiap ide.
+            `;
+
+            try {
+                const resultText = await callGeminiAPI(prompt);
+                
+                // Basic markdown to HTML conversion
+                let formattedHtml = resultText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/(\d+\.\s*<strong>.*?<\/strong>)/g, '<h3>$1</h3>') // Wrap numbered titles in h3
+                    .replace(/\n/g, '<br>');
+
+                ideaOutput.innerHTML = formattedHtml;
+                outputContainer.style.display = "block";
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                ideaOutput.innerHTML = `<p style="color: #ef4444; text-align: center;">Maaf, terjadi kesalahan saat mengambil ide. Coba lagi nanti.</p>`;
+                outputContainer.style.display = "block";
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        /**
+         * Calls the backend Gemini API to generate text content.
+         */
+        async function callGeminiAPI(prompt) {
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+            const apiKey = ""; // Handled by the environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) throw new Error(`API call failed with status: ${response.status}`);
+            
+            const result = await response.json();
+            
+            if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error("Unexpected response structure from API.");
+            }
+        }
+
+        /**
+         * Toggles the loading state of the generate button.
+         */
+        function setLoading(isLoading) {
+            generateButton.disabled = isLoading;
+            if (isLoading) {
+                buttonText.textContent = 'Generating...';
+                loader.style.display = 'block';
+            } else {
+                buttonText.textContent = '🎬 Generate Ide';
+                loader.style.display = 'none';
+            }
+        }
+
+        /**
+         * Copies the generated content to the clipboard.
+         * Uses a temporary textarea for broad browser compatibility.
+         */
+        function copyOutput() {
+            const textToCopy = ideaOutput.innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            // Provide visual feedback
+            const originalButtonText = copyButton.innerText;
+            copyButton.innerText = "Disalin!";
+            setTimeout(() => {
+                copyButton.innerText = originalButtonText;
+            }, 2000); // Revert back after 2 seconds
+        }
+
+    </script>
+</body>
+</html>
